@@ -38,7 +38,7 @@ form {
 }
 
 .block {
-
+    padding: 15px 5px 15px 5px;
     border-bottom: 1px solid darkgreen;
     border-top: 1px solid darkgreen;
     margin-bottom: 8px;
@@ -79,7 +79,28 @@ input:hover { background: #275C28; box-shadow: -1px 1px 30px 1px;}
     margin-bottom: 10px;
 }
 .wrapper {max-width: 920px; margin: 0 auto;position: relative; min-height: 100%;}
-
+.back:before {
+    content:'';
+    position: absolute;
+    left: -80px;
+    top:0;
+    height: 100%;
+    width: 80px;
+    background: rgba(250, 253, 254,0) url(/img/snow_02.png) repeat;
+    background-position-x: 54%;
+    background-position-y: -15%;
+}
+.back:after {
+    content:'';
+    position: absolute;
+    right: -80px;
+    top:0;
+    height: 100%;
+    width: 80px;
+    background: rgba(250, 253, 254,0) url(/img/snow_02.png) repeat;
+    background-position-x: 113%;
+    background-position-y: -15%;
+}
 .back {
     background-color: RGBA(63, 191, 191,0.8);
     padding: 15px;
@@ -214,7 +235,10 @@ footer a ,header a{
     color: bisque;
     border: none;
 }
-
+.container {
+    position: relative;
+    min-height: 100vh;
+}
 footer {
     position: absolute;
     left: 0;
@@ -358,6 +382,11 @@ a:focus{
     float: left;
     display: inline;
 }
+.pagination a {
+    width: inherit;
+    float: left;
+    display: inline;
+}
 .link {
     width: 180px;
 }
@@ -369,4 +398,8 @@ textarea {
 .tasks {
     border-top: 1px solid #2F4F4F ;
     padding-top: 15px;
+}
+.error {
+    background: #2F4F4F;
+    padding: 3px;
 }

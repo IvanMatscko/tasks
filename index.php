@@ -18,7 +18,7 @@ require_once('view/includes/header.php');
 ?>
 
 <div class="container">
-
+<!-- забыл про bootstrap , прошу понять и простить-->
     <div class="wrapper back">
         <?php
             $data = $_POST;
@@ -63,9 +63,9 @@ require_once('view/includes/header.php');
                     $task->email = $data['email'];
                     $task->task = $data['task'];
                     R::store($task);
-                    echo '<div style="color: green;">Successfully</div><hr>';
+                    echo '<div style="color: green;" class="error">Successfully</div><hr>';
                 } else{
-                    echo '<div style="color: red;">'.array_shift($errors).'</div><hr>';
+                    echo '<div style="color: red;" class="error">'.array_shift($errors).'</div><hr>';
                 }
             }
         ?>
