@@ -12,6 +12,7 @@ require_once('../../includes/initialize.php');
 
 
     <link href="../../public/css/style.css" rel="stylesheet">
+
 </head>
 <body class="clr">
 <?php
@@ -23,11 +24,40 @@ require_once('../../includes/initialize.php');
         <?php if ( isset($_SESSION['logged_user']) ) : ?>
             <div class="log clr">
                 <a href="../auth/logout.php">logout</a>
-                <a href="#">Имя пользователя - <?php echo $_SESSION['logged_user']->login; ?></a>
+                <a href="#">Name - <?php echo $_SESSION['logged_user']->login; ?></a>
             </div>
 
             <?php
-                $tasks = R::findAll('task');
+
+            if (isset($_GET['page'])){
+                $page = $_GET['page'];
+            } else {
+                $page = 1;
+            }
+
+            $limit = 3;
+            $number = ($page * $limit)- $limit;
+
+            $tasks_total = R::count( 'task' );
+            $str_page = ceil($tasks_total / $limit);
+
+            $tasks = R::findAll('task','ORDER BY id LIMIT '.(($page-1)*$limit).', '.$limit);
+
+            $data = $_POST;
+            if ($data['sort'] == 'name'){
+                $tasks = R::findAll('task','ORDER BY name DESC LIMIT '.(($page-1)*$limit).', '.$limit);
+
+            }
+            if ($data['sort'] == 'email'){
+                $tasks = R::findAll('task','ORDER BY email DESC LIMIT '.(($page-1)*$limit).', '.$limit);
+            }
+            if ($data['sort'] == 'checkbox'){
+                $tasks = R::findAll('task','ORDER BY checkbox DESC LIMIT '.(($page-1)*$limit).', '.$limit);
+            }
+            if ($data['sort'] == 'all'){
+                $tasks = R::findAll('task','ORDER BY id DESC LIMIT '.(($page-1)*$limit).', '.$limit);
+            }
+
             ?>
 
             <?php foreach ($tasks as $task):?>
@@ -57,10 +87,17 @@ require_once('../../includes/initialize.php');
                                 ?></h3>
                         </div>
 
-                        <a href="/view/admin/edit.php?id_task=<?php echo $task['id'];?>"> Редактировать</a>
+                        <a href="/view/admin/edit.php?id_task=<?php echo $task['id'];?>">Edit</a>
                     </div>
                 </div>
             <?php endforeach?>
+            <div class="pagination clr">
+                <?php
+                for ($i = 1; $i<=$str_page; $i++){
+                    echo " <a href=admin.php?page=".$i.">.$i.</a> ";
+                }
+                ?>
+            </div>
 
         <?php else: ?>
             <a href="../auth/login.php">login</a>

@@ -27,15 +27,35 @@ require_once('view/includes/header.php');
                 if( trim(($data['name']) == '')){
                     $errors[] = 'Enter Name!';
                 }
+                if( R::count('task', "name = ?", array($data['name'])) > 0 ){
+                    $errors[] = 'This Name already exists!';
+                }
+
+                $str = $data['name'];
+                if (preg_match("/^[a-zA-Zа-яА-Я]+$/ui", $str)) {
+                }
+                else {
+                    $errors[] = 'Forbidden name format!';
+                }
                 if( trim(($data['email']) == '')){
                     $errors[] = 'Enter Email!';
                 }
-                if( R::count('tasks', "email = ?", array($data['email'])) > 0 ){
+
+                $str = $data['email'];
+                if (preg_match("/[0-9a-z]+@[a-z]/", $str)) {
+                }
+                else {
+                    $errors[] = 'Email entered incorrectly!';
+                }
+
+                if( R::count('task', "email = ?", array($data['email'])) > 0 ){
                     $errors[] = 'This Email already exists!';
                 }
                 if( trim(($data['task']) == '')){
                     $errors[] = 'Enter Task!';
                 }
+
+
                 if( empty($errors)){
                     //всё хорошо рег
                     $task = R::dispense('task');
@@ -49,24 +69,24 @@ require_once('view/includes/header.php');
                 }
             }
         ?>
-        <a href="/view/admin/admin.php">Admin</a>
+        <a href="/view/admin/admin.php" class="link">Admin</a>
         <form action="index.php" method="POST">
             <h1>Task</h1>
             <div class="form-group">
                 <label>Name</label>
-                <input type="text" name="name" class="form-control" value="<?php echo @$data['name'];?>">
+                <input type="text" name="name" class="form-control" value="<?php echo @$data['name'];?>" placeholder="Name">
             </div>
             <div class="form-group">
                 <label>Email</label>
-                <input type="text" name="email" class="form-control" value="<?php echo @$data['email'];?>">
+                <input type="text" name="email" class="form-control" value="<?php echo @$data['email'];?>" placeholder="Email">
             </div>
 
             <div class="form-group">
                 <label>Task</label>
-                <textarea typeof="text" name="task" class="form-control"></textarea>
+                <textarea typeof="text" name="task" placeholder="Task" class="form-control"></textarea>
             </div>
 
-            <div class="but"><button type="submit" name="do_task">Сохранить</button></div>
+            <div class="but"><button type="submit" name="do_task">Save</button></div>
         </form>
         <div class="tasks">
             <?php
@@ -82,13 +102,13 @@ require_once('view/includes/header.php');
                 <div class="form-group">
                     <label>Sorting</label>
                     <select name="sort" class="form-control options">
-                        <option class="first">Выбрать</option>
+                        <option class="first">All</option>
                         <option name="name" value="name">Name</option>
                         <option name="email" value="email">Email</option>
                         <option name="checkbox" value="checkbox">Done</option>
                     </select>
                 </div>
-                <div class="but"><button type="submit" name="sorting">Сохранить</button></div>
+                <div class="but"><button type="submit" name="sorting">Save</button></div>
             </form>
 
 
@@ -112,25 +132,17 @@ require_once('view/includes/header.php');
 
             $data = $_POST;
             if ($data['sort'] == 'name'){
-                function my_sort($a, $b){
-                    return $a['name'] >= $b['name'];
-                }
+                $tasks = R::findAll('task','ORDER BY name DESC LIMIT '.(($page-1)*$limit).', '.$limit);
 
-                usort($tasks, 'my_sort');
             }
             if ($data['sort'] == 'email'){
-                function my_sort1($a, $b){
-                    return $a['email'] >= $b['email'];
-                }
-
-                usort($tasks, 'my_sort1');
+                $tasks = R::findAll('task','ORDER BY email DESC LIMIT '.(($page-1)*$limit).', '.$limit);
             }
             if ($data['sort'] == 'checkbox'){
-                function my_sort2($a, $b){
-                    return $a['checkbox'] <= $b['checkbox'];
-                }
-
-                usort($tasks, 'my_sort2');
+                $tasks = R::findAll('task','ORDER BY checkbox DESC LIMIT '.(($page-1)*$limit).', '.$limit);
+            }
+            if ($data['sort'] == 'all'){
+                $tasks = R::findAll('task','ORDER BY id DESC LIMIT '.(($page-1)*$limit).', '.$limit);
             }
 
             ?>

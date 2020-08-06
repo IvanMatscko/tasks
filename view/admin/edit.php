@@ -22,8 +22,7 @@ require_once('../../includes/initialize.php');
 
     <div class="wrapper back">
         <?php if ( isset($_SESSION['logged_user']) ) : ?>
-            <a href="../auth/logout.php">logout</a>
-            <a href="#">Имя пользователя - <?php echo $_SESSION['logged_user']->login; ?></a>
+            <a href="../admin/admin.php" class="link">Admin</a>
 
 
             <?php
@@ -60,19 +59,19 @@ require_once('../../includes/initialize.php');
                         <input type="checkbox" name="checkbox" value="1">
                     </div>
                     <div class="form-group item">
-                        <div class="but"><button type="submit" name="save">Сохранить</button></div>
+                        <div class="but"><button type="submit" name="save">Save</button></div>
                     </div>
 
                     <div class="form-group item">
-                        <a class="form-control" href="/methods/delete.php?id_task=<?php echo $task->id;?>" >Удалить</a>
+                        <a class="form-control" href="/methods/delete.php?id_task=<?php echo $task->id;?>" >Delete</a>
                     </div>
 
                 </form>
             <?php endforeach?>
 
         <?php else: ?>
-            <a href="../auth/registration.php">Registration</a>
-            <a href="../auth/login.php">login</a>
+            <a href="../auth/registration.php" class="link">Registration</a>
+            <a href="../auth/login.php" class="link">login</a>
         <?php endif; ?>
     </div>
 </div>
